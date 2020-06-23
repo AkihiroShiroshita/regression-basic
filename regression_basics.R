@@ -26,3 +26,28 @@ df$age.cgm <- df$age - mean(df$age)
 df.age.cm <- df$age.m - mean(df$age)
 model3 <- lmer(hospitalization ~ age.m + age.cgm + (1+age.cgm||hospital), data=df, REML=FALSE)
 summary(model3)
+#logistic regression
+glm <- glm(death ~ age + bun + ams + hr, family="binomial", data=df)
+summary(glm)
+exp(confint(glm, level=0.95))
+install.packages("ResourceSelection")
+library(ResourceSelection)
+hoslem.test(x=glm$y, y=fitted(glm))
+extractAIC(glm)
+extractAIC(glm, k=log(nrow(glm$data)))
+step(glm, direction="both", scope=(~age + bun + ams + hr))
+library(car)
+vif(glm)
+
+
+
+
+
+
+
+
+
+
+
+
+
